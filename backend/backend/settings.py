@@ -131,3 +131,5 @@ CHANNEL_LAYERS = {
         "BACKEND": "channels.layers.InMemoryChannelLayer"
     }
 }
+
+ALLOWED_HOSTS=['*']
