@@ -3,6 +3,7 @@ from docker.errors import NotFound
 import threading
 import time
 import queue
+from backend.code_execution.exceptions import *
 
 class ContainerManager():
     _lock = threading.Lock()
@@ -15,6 +16,9 @@ class ContainerManager():
         self.container = self.get_container_handler("test_app2")
         self.count_limit = 1
         self.time_limit = 9000
+
+    def __del__(self):
+        self.__remove_container_handler(self.container)
 
     def send_input_to_container(self,input):
         self.container.send_input(input)
@@ -98,7 +102,7 @@ class ContainerManager():
             ContainerManager.control_thread.start()
 
 
-    def remove_container_handler(self,container):
+    def __remove_container_handler(self,container):
         container.stop()
         with ContainerManager._lock:
             ContainerManager._containers.remove(container)
