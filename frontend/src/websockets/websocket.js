@@ -4,24 +4,16 @@ import ReconnectingWebSocket from 'reconnecting-websocket';
 const SERVER_URL = "ws://127.0.0.1:8000/execute/"
 
 class WebSocketService {
-    static instance = null
     socketRef = null
     callbacks = {}
 
-    static getInstance() {
-        if (this.instance === null) {
-            this.instance = new WebSocketService();
-        }
-        return this.instance
-    }
     async connect() {
         console.log("connection in progress")
-        console.log(`socket_ref = ${this.socketRef}`)
-
         if (this.socketRef !== null) {
             this.disconnect()
         }
-        this.socket_ref = new ReconnectingWebSocket(SERVER_URL)
+        this.socketRef = new ReconnectingWebSocket(SERVER_URL)
+        console.log(`socket_ref = ${this.socketRef}`)
 
         this.socketRef.onopen = () => {
             this.handleOnOpen();
@@ -35,6 +27,7 @@ class WebSocketService {
         this.socketRef.onclose = () => {
             console.log("WebSocket closed");
         };
+
     }
     disconnect() {
         this.socketRef.close();
@@ -54,6 +47,7 @@ class WebSocketService {
     }
 
     sendMessage(data) {
+        console.log("Sending msg")
         let jsonData = JSON.stringify({ ...data })
         try {
             this.socketRef.send(jsonData)
@@ -73,11 +67,21 @@ class WebSocketService {
 
 class CodePlaygroundWebSocketService extends WebSocketService{
     onActionCallbacks = {}
+    static instance = null
+
+    static getInstance(){
+        if (this.instance === null) {
+            this.instance = new CodePlaygroundWebSocketService();
+        }
+        return this.instance;
+    }
 
     handleOnMessage(textData) {
+        console.log("msg was reacived")
         super.handleOnMessage(textData)
+        console.log("action callbacks")
         if(this.onActionCallbacks.hasOwnProperty(textData['action'])){
-            textData['action'](textData)
+            this.onActionCallbacks[textData['action']](textData)
         }
     }
 
@@ -93,9 +97,23 @@ class CodePlaygroundWebSocketService extends WebSocketService{
         this.onActionCallbacks[action] = callback
     }
 
+    sendExecuteRequest(code){
+        console.log("sending request to execute",code)
+        this.sendMessage({
+            'action':'execute',
+            'content':code
+        })
+    }
+
+    sendContainerInput(data){
+        this.sendMessage({
+            'action':'input',
+            'content':data
+        })
+    }
+
 }
 
-   
-const WebSocketInstance = CodePlaygroundWebSocketService.getInstance();
 
+const WebSocketInstance = CodePlaygroundWebSocketService.getInstance();
 export default WebSocketInstance;

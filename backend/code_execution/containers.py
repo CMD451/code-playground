@@ -3,7 +3,7 @@ from docker.errors import NotFound
 import threading
 import time
 import queue
-from backend.code_execution.exceptions import *
+# from backend.code_execution.exceptions import *
 
 class ContainerManager():
     _lock = threading.Lock()
@@ -58,7 +58,7 @@ class ContainerManager():
                     if time.time() - container.started > self.time_limit and container.is_running():
                         container.stop()
             time.sleep(2)
-            print("I'm alive :0, my name is: ",threading.currentThread().ident)
+            #print("I'm alive :0, my name is: ",threading.currentThread().ident)
 
 
     def __set_container_active(self,container):
