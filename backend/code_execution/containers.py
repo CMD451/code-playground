@@ -27,10 +27,10 @@ class ContainerManager():
         self.container.set_on_message(callback)
 
     def set_on_start(self,callback):
-        self.container.set_on_start(lambda container: (callback(container),self.__set_container_active(container)))
+        self.container.set_on_start(lambda : (callback(),self.__on_container_start()))
 
     def set_on_stop(self,callback):
-        self.container.set_on_stop(lambda container: (callback(container),self.__on_container_stop(container)))
+        self.container.set_on_stop(lambda : (callback(),self.__on_container_stop()))
 
     def set_code(self,code):
         self.container.set_code(code)
@@ -78,14 +78,16 @@ class ContainerManager():
                 queued_container.start()
                 break
 
-    def __on_container_stop(self,container):
-        self.__set_container_inactive(container)
+    def __on_container_stop(self):
+        self.__set_container_inactive(self.container)
         self.__check_queue()
       
+    def __on_container_start(self):
+        self.__set_container_active(self.container)
         
     def __create_container_handler(self,image_name):
         container_handler = ContainerHandler(image_name)
-        container_handler.set_on_start(self.__set_container_active)
+        container_handler.set_on_start(self.__on_container_start)
         container_handler.set_on_stop(self.__on_container_stop)
         ContainerManager._containers.append(container_handler)
         return container_handler
@@ -151,6 +153,9 @@ class ContainerHandler():
             return False
     
     def read_container_logs(self):
+        if 'on_start' in self.callbacks:
+            self.callbacks['on_start']()
+            
         self.started = time.time()
         while self.is_running() and not self.should_stop:
             try:
@@ -163,7 +168,7 @@ class ContainerHandler():
             except:
                 break
         if 'on_stop' in self.callbacks:
-            self.callbacks['on_stop'](self)
+            self.callbacks['on_stop']()
 
 
     def stop(self):
@@ -177,7 +182,5 @@ class ContainerHandler():
         self.container = self.client.containers.run(self.image_name,command=[self.code], detach=True,stdin_open=True,auto_remove=True)
         self.attach_socket = self.container.attach_socket(params={'stdin': 1, 'stdout': 1, 'stream': 1, 'logs': 1})
         self.log_thread = threading.Thread(target=self.read_container_logs)
-        if 'on_start' in self.callbacks:
-            self.callbacks['on_start'](self)
         self.log_thread.start()
       

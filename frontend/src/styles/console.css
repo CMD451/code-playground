@@ -2,3 +2,15 @@
     color: red;
     white-space: pre-line;
 }
+
+
+.console-running,.console-stopped{
+    padding: 0.4em;
+}
+
+.console-running{
+    background-color: red;
+}
+.console-stopped{
+    background-color: greenyellow;
+}

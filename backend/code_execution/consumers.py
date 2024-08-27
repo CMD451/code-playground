@@ -16,16 +16,25 @@ class CodeExecutionConsumer(AsyncWebsocketConsumer):
             }))
     
     async def on_container_log(self,log):  
-        #json_data = {'message':log}
         await self.send_message('output',log)
+
+    async def on_container_start(self):
+        await self.send_message('status',True)
+
+    async def on_container_stop(self):
+        await self.send_message('status',False)
+        
+    def set_container_callbacks(self):
+        self.container_manager.set_on_message(async_to_sync(self.on_container_log))
+        self.container_manager.set_on_start(async_to_sync(self.on_container_start))
+        self.container_manager.set_on_stop(async_to_sync(self.on_container_stop))
+
 
     async def execute_action(self,json_data):
         if self.container_manager.is_running():
             self.container_manager.stop()
-        self.container_manager.set_on_message(async_to_sync(self.on_container_log))
+        self.set_container_callbacks()
         self.container_manager.set_code(json_data['content'])
-        # self.container_manager.
-        print("container start")
         self.container_manager.start()
         
     async def input_action(self,json_data):
@@ -34,7 +43,8 @@ class CodeExecutionConsumer(AsyncWebsocketConsumer):
         self.container_manager.send_input_to_container(json_data['input'])
 
     async def stop_action(self,json_data):
-        self.container_manager.stop()
+        if self.container_manager.is_running():
+            self.container_manager.stop()
 
     actions = {
         'execute':execute_action,

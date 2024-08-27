@@ -10,9 +10,7 @@ export default function Console(props) {
 
     return (
         <div>
-            {isRunning ? 
             <p className="output" >{content}</p>
-            : 'OFF'}
         </div>
     );
   } 
