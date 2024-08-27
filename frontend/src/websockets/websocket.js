@@ -3,9 +3,35 @@ import ReconnectingWebSocket from 'reconnecting-websocket';
 
 const SERVER_URL = "ws://127.0.0.1:8000/execute/"
 
-class WebSocketService {
+
+class Observable{
+    observers = {};
+
+    
+    subscribe(func,eventName){
+    if(!this.observers.hasOwnProperty(eventName)){
+        this.observers[eventName] = new Array()
+    }
+    this.observers[eventName].push(func)
+    }
+    
+    unsubscribe(func,eventName) {
+    if(this.observers.hasOwnProperty(eventName)){
+        this.observers[eventName] = this.observers[eventName].filter((observer) => observer !== func);
+    }
+    }
+    
+    notify(data,eventName) {
+    if(this.observers.hasOwnProperty(eventName)){
+        this.observers[eventName].forEach((observer) => observer(data));
+    }
+    }
+}
+
+
+
+class WebSocketService extends Observable {
     socketRef = null
-    callbacks = {}
 
     async connect() {
         console.log("connection in progress")
@@ -34,16 +60,12 @@ class WebSocketService {
         this.socketRef = null;
     }
 
-    handleOnMessage(text_data) {
-        if (this.callbacks.hasOwnProperty('onMessage')) {
-            this.callbacks['onMessage'](text_data)
-        }
+    handleOnMessage(text_data) {   
+        this.notify(text_data,'onMessage')
     }
 
     handleOnOpen() {
-        if (this.callbacks.hasOwnProperty('onOpen')) {
-            this.callbacks['onOpen']()
-        }
+        this.notify({},'onOpen')
     }
 
     sendMessage(data) {
@@ -57,16 +79,9 @@ class WebSocketService {
         }
 
     }
-    setOnOpenCallback(callback) {
-        this.callbacks['onOpen'] = callback
-    }
-    setOnMessageCallback(callback) {
-        this.callbacks['onMessage'] = callback
-    }
 }
 
 class CodePlaygroundWebSocketService extends WebSocketService{
-    onActionCallbacks = {}
     static instance = null
 
     static getInstance(){
@@ -77,24 +92,9 @@ class CodePlaygroundWebSocketService extends WebSocketService{
     }
 
     handleOnMessage(textData) {
-        console.log("msg was reacived")
         super.handleOnMessage(textData)
-        console.log("action callbacks")
-        if(this.onActionCallbacks.hasOwnProperty(textData['action'])){
-            this.onActionCallbacks[textData['action']](textData)
-        }
-    }
-
-    setOnOutputActionCallback(callback){
-        this.setOnActionCallback('output',callback)
-    }
-
-    setOnStatusActionCallback(callback){
-        this.setOnActionCallback('status',callback)
-    }
-
-    setOnActionCallback(action,callback){
-        this.onActionCallbacks[action] = callback
+        console.log(textData['action'])
+        this.notify(textData,textData['action'])
     }
 
     sendExecuteRequest(code){
@@ -102,6 +102,13 @@ class CodePlaygroundWebSocketService extends WebSocketService{
         this.sendMessage({
             'action':'execute',
             'content':code
+        })
+    }
+
+    sendStopRequest(){
+        console.log("sending request to stop")
+        this.sendMessage({
+            'action':'stop'
         })
     }
 

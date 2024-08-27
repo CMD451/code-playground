@@ -7,11 +7,11 @@ export function useConsole(webSocketInstance) {
     const [content, setContent] = useState("");
 
     useEffect(()=>{
-        webSocketInstance.setOnOutputActionCallback((data)=>{
+        webSocketInstance.subscribe((data)=>{
             setContent(prev => (
                 prev+data['content']
             ));
-        })
+        },'output')
     },[])
 
     function sendInput(input){

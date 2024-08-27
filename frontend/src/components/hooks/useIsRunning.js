@@ -4,12 +4,12 @@ import { useEffect, useState} from "react";
 
 
 export function useIsRunning(webSocketInstance) {
-    const [isRunning, setIsRunning] = useState(true);
+    const [isRunning, setIsRunning] = useState(false);
 
     useEffect(()=>{
-        webSocketInstance.setOnOutputActionCallback((data)=>{
-            setIsRunning(data['status'])
-        })
+        webSocketInstance.subscribe((data)=>{
+            setIsRunning(data['content'])
+        },'status')
     },[])
 
    return isRunning;
