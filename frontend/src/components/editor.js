@@ -1,24 +1,26 @@
 import React from "react";
 import { useEffect, useState, useRef } from "react";
 import { useIsRunning } from "./hooks/useIsRunning";
-import RunContainerButton from "./runContainerButton";
+
+import "../styles/editor.css"
 
 export default function Editor(props) {
     const [code,setCode] = useState("")
     const isRunning = useIsRunning(props.websocketInstance)
 
     function handleChange(event){
-        setCode(event.target.value)
+        const newCode = event.target.value
+        setCode(newCode)
+        if(props.hasOwnProperty("onChange")){
+            props.onChange(newCode)
+        }
     }
 
     return (
-        <div>
-            <textarea onChange={handleChange} />
-            <RunContainerButton
-                isRunning = {isRunning}
-                onButtonRun = {()=>{props.websocketInstance.sendExecuteRequest(code)}}
-                onButtonStop = {()=>{props.websocketInstance.sendStopRequest()}}
-            />
+        <div className="editor panel-content">
+            <textarea className="editor-text" wrap="off" onChange={handleChange} value={code}>
+                {code}
+            </textarea>
         </div>
     );
   } 

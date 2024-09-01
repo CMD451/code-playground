@@ -40,10 +40,12 @@ class CodeExecutionConsumer(AsyncWebsocketConsumer):
     async def input_action(self,json_data):
         if not self.container_manager.is_running():
             return
-        self.container_manager.send_input_to_container(json_data['input'])
+        self.container_manager.send_input_to_container(json_data['content'])
 
     async def stop_action(self,json_data):
+        print("Reacived request to stop")
         if self.container_manager.is_running():
+            print("Trying to stop container")
             self.container_manager.stop()
 
     actions = {

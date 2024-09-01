@@ -69,7 +69,6 @@ class WebSocketService extends Observable {
     }
 
     sendMessage(data) {
-        console.log("Sending msg")
         let jsonData = JSON.stringify({ ...data })
         try {
             this.socketRef.send(jsonData)

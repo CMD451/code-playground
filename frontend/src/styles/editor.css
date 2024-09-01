@@ -1,0 +1,14 @@
+
+.editor{
+    padding: 0.5em;
+    background-color: aqua;
+    overflow: scroll;
+}
+.editor-text{
+    width: 90%;
+    height: 100%;
+}
+.handle{
+    padding: 0.2em;
+    background-color: black;
+}

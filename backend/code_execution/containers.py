@@ -173,7 +173,9 @@ class ContainerHandler():
 
     def stop(self):
         if not self.is_running():
+            print("Container is considered to be stopped")
             return
+        print("Actual attempt at stopping the container")
         self.should_stop = True
         self.container.stop()
 

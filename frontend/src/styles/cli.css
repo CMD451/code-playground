@@ -1,0 +1,14 @@
+.cli-container{
+
+}
+.cli-output{
+    padding: 0;
+    margin: 0;
+}
+.cli-input-container{
+    display: flex;
+}
+.prompt{
+    padding: 0;
+    margin: 0;
+}
