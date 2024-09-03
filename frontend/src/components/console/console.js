@@ -1,10 +1,10 @@
 import React from "react";
 import { useEffect, useState, useRef } from "react";
-import { useConsole } from "./hooks/useConsole";
-import { useIsRunning } from "./hooks/useIsRunning";
-import RunContainerButton from "./runContainerButton";
+import { useConsole } from "../hooks/useConsole";
+import { useIsRunning } from "../hooks/useIsRunning";
+import RunContainerButton from "../runContainerButton";
 import Cli from "./cli";
-import "../styles/console.css"
+import "../../styles/console.css"
 
 export default function Console(props) {
     const isRunning = useIsRunning(props.websocketInstance)

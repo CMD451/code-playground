@@ -1,8 +1,8 @@
 :root {
-    --color-background-default: #606c38;
-    --color-default: #ffffff;
+    --color-background-default: #161b22;
+    --color-default: #000000;
     --color-panel:#fefae0;
-    --color-panel-background: #283618;
+    --color-panel-background: #272822;
     --color-panel-background-alternate: #202124;
   }
 
@@ -44,7 +44,6 @@
     width: 100%;
     display: flex;
     overflow: scroll;
-    border-radius: 0.5rem;
 
     background-color: var(--color-panel-background);
     color: var(--color-panel);

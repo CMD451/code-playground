@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useState} from "react";
 import CliInput from "./cliInput";
-import "../styles/cli.css"
+import "../../styles/cli.css"
 
 
 export default function Cli(props) {

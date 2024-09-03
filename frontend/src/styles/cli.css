@@ -4,6 +4,9 @@
 .cli-output{
     padding: 0;
     margin: 0;
+    white-space: pre-line;
+    margin-left: 0.6em;
+    padding: 0.1em;
 }
 .cli-input-container{
     display: flex;

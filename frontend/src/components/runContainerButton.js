@@ -1,8 +1,5 @@
 import React from "react";
 import { useEffect, useState, useRef } from "react";
-import WebSocketInstance from "../websockets/websocket";
-import Console from "./console";
-import Editor from "./editor";
 
 
 export default function RunContainerButton(props) {

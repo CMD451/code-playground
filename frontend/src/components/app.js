@@ -1,8 +1,8 @@
 import React from "react";
 import { useEffect, useState, useRef } from "react";
 import WebSocketInstance from "../websockets/websocket";
-import Console from "./console";
-import Editor from "./editor";
+import Console from "./console/console";
+import Editor from "./editor/editor";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 
 
