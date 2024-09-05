@@ -11,9 +11,6 @@ import "../../styles/editor.css"
 export default function Editor(props) {
     const lang = python
     const theme = okaidia
-
-    console.log(theme)
-
     const [code,setCode] = useState("")
     const isRunning = useIsRunning(props.websocketInstance)
 
@@ -31,7 +28,7 @@ export default function Editor(props) {
              value={code} 
              style={{ width: '100%' }} 
              height="1000px"
-             theme={okaidia}
+             theme={theme}
              extensions={[lang()]}
              onChange={handleChange} />
         </div>

@@ -12,8 +12,8 @@ class ContainerManager():
     _queue = queue.Queue()
     control_thread = None
     
-    def __init__(self):
-        self.container = self.get_container_handler("test_app2")
+    def __init__(self,image_name):
+        self.container = self.get_container_handler(image_name)
         self.count_limit = 1
         self.time_limit = 9000
 
@@ -162,6 +162,7 @@ class ContainerHandler():
                 output = self.attach_socket.recv(1024)
                 if output :
                     if self.callbacks['on_message']:
+                        print(output.decode())
                         self.callbacks['on_message'](output.decode())
                 else:
                     break
@@ -181,7 +182,7 @@ class ContainerHandler():
 
     def start(self):
         self.should_stop = False
-        self.container = self.client.containers.run(self.image_name,command=[self.code], detach=True,stdin_open=True,auto_remove=True)
+        self.container = self.client.containers.run(self.image_name,command=[self.code], detach=True,stdin_open=True,auto_remove=False)
         self.attach_socket = self.container.attach_socket(params={'stdin': 1, 'stdout': 1, 'stream': 1, 'logs': 1})
         self.log_thread = threading.Thread(target=self.read_container_logs)
         self.log_thread.start()

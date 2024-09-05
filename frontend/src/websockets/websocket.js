@@ -38,7 +38,7 @@ class WebSocketService extends Observable {
         if (this.socketRef !== null) {
             this.disconnect()
         }
-        this.socketRef = new ReconnectingWebSocket(SERVER_URL)
+        this.socketRef = new ReconnectingWebSocket(this.getUrl())
         console.log(`socket_ref = ${this.socketRef}`)
 
         this.socketRef.onopen = () => {
@@ -54,6 +54,9 @@ class WebSocketService extends Observable {
             console.log("WebSocket closed");
         };
 
+    }
+    getUrl(){
+        return SERVER_URL
     }
     disconnect() {
         this.socketRef.close();
@@ -82,6 +85,7 @@ class WebSocketService extends Observable {
 
 class CodePlaygroundWebSocketService extends WebSocketService{
     static instance = null
+    lang = "python"
 
     static getInstance(){
         if (this.instance === null) {
@@ -89,7 +93,12 @@ class CodePlaygroundWebSocketService extends WebSocketService{
         }
         return this.instance;
     }
-
+    setLang(lang){
+        this.lang = lang
+    }
+    getUrl(){
+        return SERVER_URL+this.lang
+    }
     handleOnMessage(textData) {
         super.handleOnMessage(textData)
         console.log(textData['action'])

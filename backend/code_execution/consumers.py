@@ -4,10 +4,12 @@ from . import containers
 from asgiref.sync import async_to_sync
 
 class CodeExecutionConsumer(AsyncWebsocketConsumer):
+    container_image_name = ''
+
     
     async def connect(self):
         await self.accept()
-        self.container_manager = containers.ContainerManager()
+        self.container_manager = containers.ContainerManager(self.container_image_name)
 
     async def send_message(self,action,data):
         await self.send(text_data= json.dumps({
@@ -59,5 +61,13 @@ class CodeExecutionConsumer(AsyncWebsocketConsumer):
         await self.actions[json_data['action']](self,json_data)
 
            
+        
+
+class PythonCodeExecutionConsumer(CodeExecutionConsumer):
+    container_image_name = 'test_app2'
+
+class CCodeExecutionConsumer(CodeExecutionConsumer):
+    container_image_name = 'testc'
+
 
 

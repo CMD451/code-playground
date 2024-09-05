@@ -7,11 +7,12 @@ import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 
 
 
-export default function App(props) {
+export default function App({ lang }) {
     const [editorCode,setEditorCode] = useState("")
 
 
     useEffect(() => {
+        WebSocketInstance.setLang(lang)
         WebSocketInstance.connect();
     }, [])
 

@@ -10,10 +10,22 @@ import "./styles/root.css"
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <App/>,
+    path: '/',
+    element: <App lang='python' />,  
   },
+
+  {
+    path: '/python',
+    element: <App lang='python' />,
+  },
+
+  {
+    path: '/c',
+    element: <App lang='c' />,
+  }
 ]);
+
+
 
 const root = createRoot(document.getElementById('root'));
 root.render(
