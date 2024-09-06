@@ -7,6 +7,7 @@ import queue
 
 class ContainerManager():
     _lock = threading.Lock()
+    _start_control_thread_lock = threading.Lock()
     _active_containers = []
     _containers = []
     _queue = queue.Queue()
@@ -14,8 +15,8 @@ class ContainerManager():
     
     def __init__(self,image_name):
         self.container = self.get_container_handler(image_name)
-        self.count_limit = 1
-        self.time_limit = 9000
+        self.count_limit = 2
+        self.time_limit = 10
 
     def __del__(self):
         self.__remove_container_handler(self.container)
@@ -36,40 +37,44 @@ class ContainerManager():
         self.container.set_code(code)
 
     def start(self):
-        if len(self._active_containers) >= self.count_limit:
-            print("Putting a container into wait queue")
-            print("Current queue size: ",self._queue.qsize())
-            self._queue.put(self.container)
-            return
+        with ContainerManager._lock:
+            if len(self._active_containers) >= self.count_limit:
+                print("Putting a container into wait queue")
+                print("Current queue size: ",self._queue.qsize())
+                self._queue.put(self.container)
+                return
+            self.__set_container_active(self.container)
         self.container.start()
 
     def stop(self):
-        self.container.stop()
+        # with ContainerManager._lock:
+        #     self.__set_container_inactive(self.container)
+        self.container.stop() 
 
     def is_running(self):
         return self.container.is_running()
 
     def __control_thread(self):
         while len(self._active_containers)+len(self._containers) > 0:
-            with ContainerManager._lock:
-                for container in self._containers:
+            with self._lock:
+                for container in self._active_containers:
                     if container.started is None:
                         continue
                     if time.time() - container.started > self.time_limit and container.is_running():
+                        print("Control thread: Stopping a container due to time limit")
                         container.stop()
             time.sleep(2)
+        pass
             #print("I'm alive :0, my name is: ",threading.currentThread().ident)
 
 
     def __set_container_active(self,container):
-        with ContainerManager._lock:
-            ContainerManager._containers.remove(container)
-            ContainerManager._active_containers.append(container)
+        ContainerManager._containers.remove(container)
+        ContainerManager._active_containers.append(container)
 
     def __set_container_inactive(self,container):
-        with ContainerManager._lock:
-            ContainerManager._active_containers.remove(container)
-            ContainerManager._containers.append(container)
+        ContainerManager._active_containers.remove(container)
+        ContainerManager._containers.append(container)
 
     def __check_queue(self):
         while queued_container := ContainerManager._queue.get():
@@ -79,11 +84,15 @@ class ContainerManager():
                 break
 
     def __on_container_stop(self):
-        self.__set_container_inactive(self.container)
+        with ContainerManager._lock:
+            if self.container in self._active_containers:
+                self.__set_container_inactive(self.container)
         self.__check_queue()
       
     def __on_container_start(self):
-        self.__set_container_active(self.container)
+        with ContainerManager._lock:
+            if self.container not in self._active_containers:
+                self.__set_container_active(self.container)
         
     def __create_container_handler(self,image_name):
         container_handler = ContainerHandler(image_name)
@@ -94,7 +103,7 @@ class ContainerManager():
     
     def get_container_handler(self,image_name):
             container = self.__create_container_handler(image_name)
-            with ContainerManager._lock:
+            with ContainerManager._start_control_thread_lock:
                 self.__start_control_thread()
             return container
     
@@ -106,8 +115,7 @@ class ContainerManager():
 
     def __remove_container_handler(self,container):
         container.stop()
-        with ContainerManager._lock:
-            ContainerManager._containers.remove(container)
+        ContainerManager._containers.remove(container)
 
    
 class ContainerHandler():
@@ -162,27 +170,26 @@ class ContainerHandler():
                 output = self.attach_socket.recv(1024)
                 if output :
                     if self.callbacks['on_message']:
-                        print(output.decode())
                         self.callbacks['on_message'](output.decode())
                 else:
                     break
             except:
                 break
+            
         if 'on_stop' in self.callbacks:
             self.callbacks['on_stop']()
 
 
     def stop(self):
+        self.should_stop = True
         if not self.is_running():
             print("Container is considered to be stopped")
             return
-        print("Actual attempt at stopping the container")
-        self.should_stop = True
         self.container.stop()
 
     def start(self):
         self.should_stop = False
-        self.container = self.client.containers.run(self.image_name,command=[self.code], detach=True,stdin_open=True,auto_remove=False)
+        self.container = self.client.containers.run(self.image_name,command=[self.code], detach=True,stdin_open=True,auto_remove=True)
         self.attach_socket = self.container.attach_socket(params={'stdin': 1, 'stdout': 1, 'stream': 1, 'logs': 1})
         self.log_thread = threading.Thread(target=self.read_container_logs)
         self.log_thread.start()
