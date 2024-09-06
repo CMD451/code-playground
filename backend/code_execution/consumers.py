@@ -33,7 +33,9 @@ class CodeExecutionConsumer(AsyncWebsocketConsumer):
 
 
     async def execute_action(self,json_data):
+        print("Reacived request")
         if self.container_manager.is_running():
+            print("Container is running, stopping it")
             self.container_manager.stop()
         self.set_container_callbacks()
         self.container_manager.set_code(json_data['content'])

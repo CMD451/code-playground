@@ -9,20 +9,28 @@ import "../../styles/console.css"
 export default function Console(props) {
     const isRunning = useIsRunning(props.websocketInstance)
     const [content,sendInput,clearConsole] = useConsole(props.websocketInstance)
+    const [isLoading,setIsLoading] = useState(false)
 
+    useEffect(()=>{
+        setIsLoading(false)
+    },[isRunning])
 
     function handleButtonRun(){
         clearConsole()
         props.websocketInstance.sendExecuteRequest(props.code)
+        setIsLoading(true)
     }
 
     return (    
         <div className="console panel-content">
             <div className="console-handle">
+                <p>
+                    Loading:{isLoading.toString()}
+                </p>
                 <RunContainerButton
                     isRunning = {isRunning}
                     onButtonRun = {handleButtonRun}
-                    onButtonStop = {()=>{props.websocketInstance.sendStopRequest()}}
+                    onButtonStop = {()=>{props.websocketInstance.sendStopRequest();setIsLoading(true)}}
                 />
             </div>
             <div className="console-output">

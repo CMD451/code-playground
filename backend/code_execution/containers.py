@@ -40,7 +40,7 @@ class ContainerManager():
         with ContainerManager._lock:
             if len(self._active_containers) >= self.count_limit:
                 print("Putting a container into wait queue")
-                print("Current queue size: ",self._queue.qsize())
+                print("Current queue size: ",self._queue.qsize()+1)
                 self._queue.put(self.container)
                 return
             self.__set_container_active(self.container)
@@ -56,14 +56,14 @@ class ContainerManager():
 
     def __control_thread(self):
         while len(self._active_containers)+len(self._containers) > 0:
-            with self._lock:
+            with ContainerManager._lock:
                 for container in self._active_containers:
                     if container.started is None:
                         continue
                     if time.time() - container.started > self.time_limit and container.is_running():
                         print("Control thread: Stopping a container due to time limit")
                         container.stop()
-            time.sleep(2)
+            time.sleep(5)
         pass
             #print("I'm alive :0, my name is: ",threading.currentThread().ident)
 
@@ -77,9 +77,10 @@ class ContainerManager():
         ContainerManager._containers.append(container)
 
     def __check_queue(self):
-        while queued_container := ContainerManager._queue.get():
+        while ContainerManager._queue.qsize() > 0:
+            queued_container = ContainerManager._queue.get(block=False)
             if not queued_container.should_stop:
-                print("Starting a container that was in queue")
+                self.__set_container_active(queued_container)
                 queued_container.start()
                 break
 
@@ -87,7 +88,7 @@ class ContainerManager():
         with ContainerManager._lock:
             if self.container in self._active_containers:
                 self.__set_container_inactive(self.container)
-        self.__check_queue()
+            self.__check_queue()
       
     def __on_container_start(self):
         with ContainerManager._lock:
@@ -175,16 +176,16 @@ class ContainerHandler():
                     break
             except:
                 break
-            
+
         if 'on_stop' in self.callbacks:
             self.callbacks['on_stop']()
 
 
     def stop(self):
-        self.should_stop = True
         if not self.is_running():
             print("Container is considered to be stopped")
             return
+        self.should_stop = True
         self.container.stop()
 
     def start(self):
