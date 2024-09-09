@@ -16,6 +16,7 @@
 }
 .console-handle{
     padding: 0.2rem;
+    display: flex;
 }
 .console-output,.console-text{
     overflow: scroll;

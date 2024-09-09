@@ -8,6 +8,9 @@
     height: 100%;
 }
 .handle{
-    padding: 0.2em;
-    background-color: black;
+    padding: 0.1em;
+    background-color: var(--color-active);
+}
+.handle[data-resize-handle-state="hover"],.handle[data-resize-handle-state="drag"]{
+    background-color: var(--color-panel);
 }

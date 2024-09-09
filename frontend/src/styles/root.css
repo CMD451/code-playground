@@ -4,33 +4,45 @@
     --color-panel:#fefae0;
     --color-panel-background: #272822;
     --color-panel-background-alternate: #202124;
+    --color-console-handle:var(--color-background-default);
+    --main-font:monospace;
+    --main-font-size:15px;
+    --color-active:var(--color-panel-background);
+    --color-console-handle-drag:var(--color-active);
+      font-family: var(--main-font) !important;
   }
 
-  html,
-  body {
-    width: 100vw;
-    height: 100vh;
-    margin: 0;
-    padding: 0;
-    font-size: 15px;
+html,
+body {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  font-size: 15px;
 
-    background-color: var(--color-background-default);
-    color: var(--color-default);
-  }
+  background-color: var(--color-background-default);
+  color: var(--color-default);
+}
   
+img{
+  display: block;
+  width: 100%;
+}
+
 #root {
     position: absolute;
     left: 1.5rem;
     right: 1.5rem;
     top: 0.5rem;
     bottom: 2rem;
+  
 }
 
 .container {
     width: 100%;
     height: 100%;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 0.1rem;
   }
 

@@ -32,6 +32,7 @@ export default function Console(props) {
                     onButtonRun = {handleButtonRun}
                     onButtonStop = {()=>{props.websocketInstance.sendStopRequest();setIsLoading(true)}}
                 />
+                <button onClick={()=>{clearConsole()}}>Clear</button>
             </div>
             <div className="console-output">
                 <Cli onSend={(text)=>{sendInput(text)}} content={content} />
