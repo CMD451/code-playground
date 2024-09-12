@@ -5,16 +5,17 @@
     padding: 0.5rem;
 }
 .option-icon{
+    font-size: 2rem;
     width: 2.5rem;
+    text-align: center;
+    color: var(--color-default);
 }
 .option-icon:hover{
-    filter: invert(50%) sepia(100%) hue-rotate(180deg) saturate(500%);
+    color: var(--color-active);
 }
 .options{
     padding: 0.5rem;
 }
-
-
 .options-select {
     position: relative;
     display: inline-block;

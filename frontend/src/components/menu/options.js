@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import ThemeSelect from "./themeSelect";
 import FontSelect from "./fontSelect";
 import optionsIcon from "../../images/cog.svg"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default function Options({children}) {
     const [isDisplayed,setIsDisplayed] = useState(false)
@@ -10,7 +11,7 @@ export default function Options({children}) {
     return (
       <React.Fragment>
           <div className="option-icon" onClick={(e)=>{setIsDisplayed((prev)=>!prev)}}>
-            <img src={optionsIcon} />
+            <FontAwesomeIcon icon="fa-solid fa-gear" />
          </div>
      
           <div className="options">
