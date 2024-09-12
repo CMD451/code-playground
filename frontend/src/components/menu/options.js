@@ -9,7 +9,7 @@ export default function Options({children}) {
     const [isDisplayed,setIsDisplayed] = useState(false)
 
     return (
-      <React.Fragment>
+      <div>
           <div className="option-icon" onClick={(e)=>{setIsDisplayed((prev)=>!prev)}}>
             <FontAwesomeIcon icon="fa-solid fa-gear" />
          </div>
@@ -18,6 +18,6 @@ export default function Options({children}) {
             { isDisplayed ? children : ""}
           </div>
     
-       </React.Fragment>
+      </div>
     );
   } 

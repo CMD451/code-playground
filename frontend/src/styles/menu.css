@@ -3,12 +3,28 @@
     background: var(--color-side-menu-background);
     width: fit-content;
     padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-content: space-between;
+    column-gap: 100px;
+    
+}
+.space{
+    height: 5%;
 }
 .option-icon{
     font-size: 2rem;
     width: 2.5rem;
     text-align: center;
     color: var(--color-default);
+    text-decoration: none;
+}
+a{
+    color: var(--color-default);
+    text-decoration: none;
+}
+a:hover{
+    color: var(--color-active);
 }
 .option-icon:hover{
     color: var(--color-active);
@@ -74,4 +90,18 @@
 }
 .options-select select:disabled ~ .select-arrow {
     border-top-color: #cccccc;
+}
+.lang-list{
+    list-style-type: none;
+    /* text-align: center; */
+    padding: 0;
+    margin: 0;
+    width: 2.5rem;
+    height: fit-content;
+}
+.lang-list > *{ 
+    font-size: 2rem;
+    text-align: center;
+    color: var(--color-default);
+    margin-top: 0.5rem;
 }

@@ -8,8 +8,8 @@ import SideMenu from "./menu/sideMenu";
 import Options from "./menu/options";
 import ThemeSelect from "./menu/themeSelect";
 import FontSelect from "./menu/fontSelect";
-import { okaidia } from "@uiw/codemirror-themes-all";
 import { themes,setColorsFromTheme } from "./menu/theme";
+import LanguageSelection from "./menu/languageSelection";
 
 export default function App({ lang }) {
     const [editorCode,setEditorCode] = useState("")
@@ -50,6 +50,10 @@ export default function App({ lang }) {
                     <ThemeSelect value={options.theme}   onChange={handleThemeChange}/>
                     <FontSelect  value={options.font}    onChange={handleFontChange}/>
                 </Options>
+                <div className="space"></div>
+                <LanguageSelection/>
+                
+               
             </SideMenu>
 
             <PanelGroup autoSaveId="example" direction="vertical" >
