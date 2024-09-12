@@ -1,5 +1,6 @@
 .menu{
-    background-color: var(--color-panel-background);
+    /* background-color: var(--color-panel-background); */
+    background: var(--color-side-menu-background);
     width: fit-content;
     padding: 0.5rem;
 }
@@ -8,4 +9,68 @@
 }
 .option-icon:hover{
     filter: invert(50%) sepia(100%) hue-rotate(180deg) saturate(500%);
+}
+.options{
+    padding: 0.5rem;
+}
+
+
+.options-select {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 15px;
+    width: 100%; 
+}
+.options-select select {
+    display: inline-block;
+    width: 100%;
+    cursor: pointer;
+    padding: 10px 15px;
+    outline: 0;
+    border: 0px solid #000000;
+    border-radius: 0px;
+    background: #e6e6e6;
+    color: #7b7b7b;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+.options-select select::-ms-expand {
+    display: none;
+}
+.options-select select:hover,
+.options-select select:focus {
+    color: #000000;
+    background: #cccccc;
+}
+.options-select select:disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+.select-arrow {
+    position: absolute;
+    content: "";
+    top: 14px;
+    right: 10px;
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    border-color: #000000 transparent transparent transparent;
+}
+.options-select select:after {
+    position: absolute;
+    content: "";
+    top: 14px;
+    right: 10px;
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    border-color: #000000 transparent transparent transparent;
+}
+.options-select select:hover ~ .select-arrow,
+.options-select select:focus ~ .select-arrow {
+    border-top-color: #000000;
+}
+.options-select select:disabled ~ .select-arrow {
+    border-top-color: #cccccc;
 }

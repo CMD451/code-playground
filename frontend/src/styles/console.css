@@ -10,9 +10,27 @@
 .console-stopped{
     background-color: greenyellow;
 }
+.console-stopped:hover{
+    background-color: rgba(172, 255, 47, 0.623);
+}
+.console-running:hover{
+    background-color: rgba(255, 0, 0, 0.685);
+}
+.console-loading{
+    background-color: blue;
+}
 .console{
     display: flex;
     flex-direction: column;
+}
+.console-button{
+    margin-left: 0.7rem;
+    border: none;
+    padding: 0.3rem 0.6rem;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1rem;
 }
 .console-handle{
     padding: 0.2rem;

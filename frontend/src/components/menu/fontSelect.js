@@ -2,7 +2,7 @@ import React from "react";
 import { useEffect, useState, useRef } from "react";
 
 
-export default function FontSelect({onChange}) {
+export default function FontSelect({value,onChange}) {
 
     const root = document.documentElement;
 
@@ -42,18 +42,19 @@ export default function FontSelect({onChange}) {
         onChange("font",event.target.value)
     }
     return (
-        <div className="font-select"> 
+        <div className="font-select options-select"> 
             Font:<select id="fonts" onChange={onFontChange}>
                 {
                     fonts.map((fontName)=>{
                        return(
-                            <option value={fontName} key={fontName}> 
+                            <option value={fontName} key={fontName} selected={fontName==value ? 'selected' : ''}> 
                                 {fontName}
                             </option>
                              )       
                     })
                 }
             </select>
+            <div class="select-arrow"/>
         </div>
     );
   } 

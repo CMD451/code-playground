@@ -24,15 +24,13 @@ export default function Console(props) {
     return (    
         <div className="console panel-content">
             <div className="console-handle">
-                <p>
-                    Loading:{isLoading.toString()}
-                </p>
                 <RunContainerButton
                     isRunning = {isRunning}
+                    isLoading={isLoading}
                     onButtonRun = {handleButtonRun}
                     onButtonStop = {()=>{props.websocketInstance.sendStopRequest();setIsLoading(true)}}
                 />
-                <button onClick={()=>{clearConsole()}}>Clear</button>
+                <button className="console-button" onClick={()=>{clearConsole()}}>Clear</button>
             </div>
             <div className="console-output">
                 <Cli onSend={(text)=>{sendInput(text)}} content={content} />

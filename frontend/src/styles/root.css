@@ -9,6 +9,7 @@
     --main-font-size:15px;
     --color-active:var(--color-panel-background);
     --color-console-handle-drag:var(--color-active);
+    --color-side-menu-background:var(var(--color-panel-background));
       font-family: var(--main-font) !important;
   }
 
@@ -19,8 +20,6 @@ body {
   margin: 0;
   padding: 0;
   font-size: 15px;
-
-  background-color: var(--color-background-default);
   color: var(--color-default);
 }
   
@@ -31,10 +30,14 @@ img{
 
 #root {
     position: absolute;
-    left: 1.5rem;
+    /* left: 1.5rem;
     right: 1.5rem;
     top: 0.5rem;
-    bottom: 2rem;
+    bottom: 2rem; */
+    left: 0rem;
+    right: 0rem;
+    top: 0.5rem;
+    bottom:0.5rem;
   
 }
 

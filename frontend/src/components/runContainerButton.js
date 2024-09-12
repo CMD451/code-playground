@@ -2,17 +2,23 @@ import React from "react";
 import { useEffect, useState, useRef } from "react";
 
 
-export default function RunContainerButton(props) {
+export default function RunContainerButton({isRunning,isLoading,onButtonRun,onButtonStop}) {
 
     function generateButton(){
         let className = "console-stopped"
         let text = "Run"
-        let onClick = props.onButtonRun
-        if(props.isRunning){
+        let onClick = onButtonRun
+        if(isRunning){
             className = "console-running"
             text = "Stop"
-            onClick = props.onButtonStop
+            onClick = onButtonStop
         }
+        if(isLoading){
+            className = "console-loading"
+            text = "..."
+            onClick = onButtonStop
+        }
+        className+=" console-button"
         return (
             <button className={className} onClick={onClick}>
                 {text}
