@@ -66,10 +66,10 @@ class CodeExecutionConsumer(AsyncWebsocketConsumer):
         
 
 class PythonCodeExecutionConsumer(CodeExecutionConsumer):
-    container_image_name = 'test_app2'
+    container_image_name = 'testpython:v2'
 
 class CCodeExecutionConsumer(CodeExecutionConsumer):
-    container_image_name = 'testc'
+    container_image_name = 'testc:v11'
 
 
 

@@ -171,7 +171,9 @@ class ContainerHandler():
                 output = self.attach_socket.recv(1024)
                 if output :
                     if self.callbacks['on_message']:
-                        self.callbacks['on_message'](output.decode())
+                        msg = output.decode()
+                        print(msg)
+                        self.callbacks['on_message'](msg)
                 else:
                     break
             except:
@@ -190,7 +192,10 @@ class ContainerHandler():
 
     def start(self):
         self.should_stop = False
-        self.container = self.client.containers.run(self.image_name,command=[self.code], detach=True,stdin_open=True,auto_remove=True)
+        self.container = self.client.containers.run(self.image_name,command=[self.code],
+                                                     detach=True,
+                                                     stdin_open=True,
+                                                     auto_remove=False)
         self.attach_socket = self.container.attach_socket(params={'stdin': 1, 'stdout': 1, 'stream': 1, 'logs': 1})
         self.log_thread = threading.Thread(target=self.read_container_logs)
         self.log_thread.start()

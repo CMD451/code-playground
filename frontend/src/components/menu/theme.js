@@ -15,7 +15,6 @@ function getCssValueFromString(string,valueName){
 }
 
 export function setColorsFromTheme(theme){
-    console.log(theme)
     const backgroundColor = getCssValueFromString(theme[0][1].value.rules[0],'background-color')
     const color = getCssValueFromString(theme[0][1].value.rules[0],' color')
     const activeColor = getCssValueFromString(theme[0][1].value.rules[3],'background-color')

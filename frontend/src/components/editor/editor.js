@@ -10,7 +10,7 @@ import {abcdef} from '@uiw/codemirror-themes-all'
 
 import "../../styles/editor.css"
 
-export default function Editor({onChange,websocketInstance,theme}) {
+export default function Editor({onChange,theme}) {
     const lang = python
     const selectedTheme = theme ? theme : abcdef
     const [code,setCode] = useState("")
@@ -19,7 +19,7 @@ export default function Editor({onChange,websocketInstance,theme}) {
     const handleChange = React.useCallback((val, viewUpdate) => {
         setCode(val)
         if(onChange){
-            props.onChange(val)
+            onChange(val)
         }
       }, []);
     

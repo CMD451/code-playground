@@ -6,7 +6,7 @@ export default function RunContainerButton({isRunning,isLoading,onButtonRun,onBu
 
     function generateButton(){
         let className = "console-stopped"
-        let text = "Run"
+        let text = "Run "
         let onClick = onButtonRun
         if(isRunning){
             className = "console-running"
@@ -15,7 +15,7 @@ export default function RunContainerButton({isRunning,isLoading,onButtonRun,onBu
         }
         if(isLoading){
             className = "console-loading"
-            text = "..."
+            text = "... "
             onClick = onButtonStop
         }
         className+=" console-button"

@@ -58,7 +58,7 @@ export default function App({ lang }) {
 
             <PanelGroup autoSaveId="example" direction="vertical" >
                 <Panel className="panel"  defaultSize={90}>
-                    <Editor onChange={handleEditorChange}  websocketInstance={WebSocketInstance} theme={themes[options.theme]} />
+                    <Editor onChange={handleEditorChange}  theme={themes[options.theme]} />
                 </Panel>
                 <PanelResizeHandle className="handle">
 
