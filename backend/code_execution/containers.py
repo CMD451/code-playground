@@ -172,7 +172,6 @@ class ContainerHandler():
                 if output :
                     if self.callbacks['on_message']:
                         msg = output.decode()
-                        print(msg)
                         self.callbacks['on_message'](msg)
                 else:
                     break
@@ -195,7 +194,13 @@ class ContainerHandler():
         self.container = self.client.containers.run(self.image_name,command=[self.code],
                                                      detach=True,
                                                      stdin_open=True,
-                                                     auto_remove=False)
+                                                     auto_remove=True,
+                                                     mem_limit="200m",
+                                                     cpu_quota=25000,
+                                                     cpu_period=100000,
+                                                     network="none"
+                                                     )
+        
         self.attach_socket = self.container.attach_socket(params={'stdin': 1, 'stdout': 1, 'stream': 1, 'logs': 1})
         self.log_thread = threading.Thread(target=self.read_container_logs)
         self.log_thread.start()
