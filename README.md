@@ -7,7 +7,7 @@
 
 
 ## Overview
-This project is an Online Compiler designed to allow users to write, compile, and execute code in various programming languages directly from their web browser. I made it to learn more about.Its primary goal was to learn more about Docker containers and how a simple remote code execution platform could be created.
+This project is designed to allow users to write, compile, and execute code in various programming languages directly from their web browser. Its primary goal was to learn more about Docker containers and how a simple remote code execution platform could be created.
 
 ## Preview
 <p align="center">
